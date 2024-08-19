@@ -3,6 +3,7 @@
 # File containing user accounts
 accounts_file="user_accounts.txt"
 admin_accounts_file="admin_accounts.txt"
+quiz_history_file="quiz_history_file.txt"
 quiz_performance_file="quiz_performance_file.csv"  # Updated file extension
 
 # Variable to store authentication status
@@ -50,6 +51,7 @@ select_quiz() {
   [ -z "$selected_quiz" ] && exit 0
 }
 
+# Function to run the selected quiz
 run_quiz() {
   if ! authenticate; then
     zenity --error --text="Access denied. Exiting."
@@ -58,6 +60,7 @@ run_quiz() {
 
   select_quiz
 
+  # Check if the user has already attempted the selected quiz
   if grep -q "^$username|$selected_quiz|" "$quiz_history_file"; then
     zenity --info --text="You have already attempted the selected quiz. Exiting."
     exit 0
@@ -102,8 +105,9 @@ run_quiz() {
 
     total_questions=$((total_questions + 1))
   done < "saved_quizzes/$selected_quiz"
- 
   
+  echo "$username|$selected_quiz|$quiz_date" >> "$quiz_history_file"
+ 
   # Append the quiz performance data to the CSV file
   if [ ! -e "$quiz_performance_file" ]; then
     echo "Username,Selected Quiz,Quiz Date,Score/Total Questions" > "$quiz_performance_file"
@@ -114,6 +118,7 @@ run_quiz() {
   zenity --info --title="Quiz Result" --text="You scored $score out of $total_questions!"
 }
 
+# Main menu loop
 while true; do
   choice=$(zenity --list --title="Quiz System" --column="Options" "Run Quiz" "Exit")
 
@@ -123,4 +128,3 @@ while true; do
     *) zenity --error --text="Invalid option." ;;
   esac
 done
-
