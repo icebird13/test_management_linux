@@ -1,5 +1,7 @@
 NOTE: THIS PROJECT IS PERFORMED ONLY ON THE SAME COMPUTER. IF ONE CAN GET IT TO WORK ON A SERVER THAT WOULD BE APPRECIATED.
 
+ORDER -> create_accounts.sh -> test_make.sh -> test_run.sh -> review_quiz.sh
+
 This project is a Test Management System implemented using a Bash script with zenity (using YAD and GNU_plot) for creating graphical user interfaces (GUIs). It allows an administrator to create, manage, and interact with quizzes, enabling various functionalities such as:
 
     Creating New Quizzes:
